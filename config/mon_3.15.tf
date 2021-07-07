@@ -7,7 +7,9 @@ module "cis_cloud_guard" {
   source                = "../modules/monitoring/cloud-guard"
   providers             = { oci = oci.home }
   compartment_id        = var.tenancy_ocid
-  reporting_region      = local.regions_map[local.home_region_key]
+  #Changes to accomodate the corner case when the Cloud Guard reporting region is different from Home Region
+  #reporting_region      = local.regions_map[local.home_region_key]
+  reporting_region      = local.local_reporting_region
   status                = var.cloud_guard_configuration_status
   self_manage_resources = false
   default_target        = {name:local.cg_target_name, type:"COMPARTMENT", id:var.tenancy_ocid} 

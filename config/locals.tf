@@ -82,5 +82,7 @@ locals {
     network_cmp_target_name     = "${local.network_compartment_name}-scan-target"
     appdev_cmp_target_name      = "${local.appdev_compartment_name}-scan-target"
     database_cmp_target_name    = "${local.database_compartment_name}-scan-target"
+    # Cloud Guard Reporting Region - to avoid the corner case of when the Cloud Guard is enabled in a region different from home
+    local_reporting_region = data.oci_cloud_guard_cloud_guard_configuration.cloud_guard_config.reporting_region
 
 }
