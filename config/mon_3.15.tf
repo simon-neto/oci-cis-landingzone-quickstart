@@ -2,7 +2,10 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 module "cis_cloud_guard" {
-  count                 = length(data.oci_cloud_guard_targets.root.target_collection[0].items) > 0 ? (data.oci_cloud_guard_targets.root.target_collection[0].items[0].display_name == local.cg_target_name ? 1 : 0): 1
+  #adding the logical condition to the count in case cloud guard is already enabled
+  count                 = length(data.oci_cloud_guard_targets.root.target_collection[0].items) > 0 ? (data.oci_cloud_guard_targets.root.target_collection[0].items[0].display_name == local.cg_target_name ? (local.cloud_guard_status ? 1 : 0) : 0): 1
+  #count                 = length(data.oci_cloud_guard_targets.root.target_collection[0].items) > 0 ? (data.oci_cloud_guard_targets.root.target_collection[0].items[0].display_name == local.cg_target_name ? 1 : 0): 1
+  #count                 = length(data.oci_cloud_guard_targets.root.target_collection[0].items) > 0 ? ((data.oci_cloud_guard_targets.root.target_collection[0].items[0].display_name == local.cg_target_name && local.could_guard_status)? 1 : 0) : 1
   depends_on            = [ null_resource.slow_down_cloud_guard ]
   source                = "../modules/monitoring/cloud-guard"
   providers             = { oci = oci.home }
